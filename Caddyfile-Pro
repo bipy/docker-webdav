@@ -1,0 +1,36 @@
+{
+	order webdav before file_server
+
+	log {
+        output file /var/log/caddy/server.log {
+            roll_size 1mb
+        }
+    }
+    
+    servers {
+        listener_wrappers {
+            proxy_protocol
+            tls
+        }
+    }
+}
+
+yourdomain.com {
+    tls {
+        dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+        key_type p256
+    }
+
+	encode gzip
+
+	log {
+        output file /var/log/caddy/access.log {
+            roll_size 1mb
+        }
+    }
+
+	webdav /* {
+		root /srv
+	}
+}
+

@@ -1,0 +1,13 @@
+{
+    auto_https off
+	order webdav before file_server
+}
+
+:80 {
+	encode gzip
+
+	webdav /* {
+		root /srv
+	}
+}
+
