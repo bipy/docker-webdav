@@ -21,6 +21,10 @@ yourdomain.com {
         key_type p256
     }
 
+    basicauth {
+        admin some-hash
+    }
+
     encode gzip
 
     log {

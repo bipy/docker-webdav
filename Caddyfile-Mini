@@ -4,6 +4,10 @@
 }
 
 :80 {
+    basicauth {
+        admin some-hash
+    }
+    
     encode gzip
 
     webdav /* {
