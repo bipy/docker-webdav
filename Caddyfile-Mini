@@ -1,17 +1,16 @@
 {
-    auto_https off
-    order webdav before file_server
+	auto_https off
+	order webdav before file_server
 }
 
 :80 {
-    basicauth {
-        admin some-hash
-    }
-    
-    encode gzip
+	basicauth {
+		admin some-hash
+	}
 
-    webdav /* {
-        root /srv
-    }
+	encode gzip
+
+	webdav /* {
+		root /srv
+	}
 }
-
