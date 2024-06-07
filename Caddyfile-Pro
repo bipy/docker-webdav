@@ -21,7 +21,7 @@ yourdomain.com {
 		key_type p256
 	}
 
-	basicauth {
+	basic_auth {
 		admin some-hash
 	}
 

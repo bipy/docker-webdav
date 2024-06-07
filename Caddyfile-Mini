@@ -4,7 +4,7 @@
 }
 
 :80 {
-	basicauth {
+	basic_auth {
 		admin some-hash
 	}
 
