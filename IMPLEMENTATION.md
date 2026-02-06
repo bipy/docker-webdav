@@ -269,8 +269,8 @@ Potential improvements for the future:
 ## Documentation
 
 - [Workflow Documentation](.github/workflows/README.md)
-- [Main README](../README.md)
-- [Dockerfile](../Dockerfile)
+- [Main README](README.md)
+- [Dockerfile](Dockerfile)
 
 ## License
 
