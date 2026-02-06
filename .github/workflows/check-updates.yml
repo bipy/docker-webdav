@@ -9,6 +9,8 @@ on:
 jobs:
   check-caddy-updates:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       has_update: ${{ steps.compare.outputs.has_update }}
       latest_version: ${{ steps.fetch_latest.outputs.version }}
