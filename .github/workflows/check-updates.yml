@@ -1,0 +1,99 @@
+name: Check for Updates
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-caddy-updates:
+    runs-on: ubuntu-latest
+    outputs:
+      has_update: ${{ steps.compare.outputs.has_update }}
+      latest_version: ${{ steps.fetch_latest.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get current version
+        id: current_version
+        run: |
+          CURRENT_VERSION=$(cat version.txt | head -1)
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: $CURRENT_VERSION"
+
+      - name: Fetch latest Caddy version
+        id: fetch_latest
+        run: |
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/caddyserver/caddy/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+          echo "version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+          echo "Latest version: $LATEST_VERSION"
+
+      - name: Compare versions
+        id: compare
+        run: |
+          CURRENT="${{ steps.current_version.outputs.version }}"
+          LATEST="${{ steps.fetch_latest.outputs.version }}"
+          
+          if [ "$CURRENT" != "$LATEST" ]; then
+            echo "has_update=true" >> $GITHUB_OUTPUT
+            echo "New version available: $LATEST (current: $CURRENT)"
+          else
+            echo "has_update=false" >> $GITHUB_OUTPUT
+            echo "Already on latest version: $CURRENT"
+          fi
+
+  update-version:
+    needs: check-caddy-updates
+    if: needs.check-caddy-updates.outputs.has_update == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update version files
+        run: |
+          NEW_VERSION="${{ needs.check-caddy-updates.outputs.latest_version }}"
+          echo "Updating to version $NEW_VERSION"
+          
+          # Update version.txt
+          echo "$NEW_VERSION" > version.txt
+          
+          # Update Dockerfile
+          sed -i "s/caddy:[0-9.]*-builder-alpine/caddy:$NEW_VERSION-builder-alpine/g" Dockerfile
+          sed -i "s/caddy:[0-9.]*-alpine/caddy:$NEW_VERSION-alpine/g" Dockerfile
+          
+          # Show changes
+          git diff
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update Caddy to ${{ needs.check-caddy-updates.outputs.latest_version }}"
+          title: "chore: update Caddy to ${{ needs.check-caddy-updates.outputs.latest_version }}"
+          body: |
+            ## Automated Caddy Update
+            
+            This PR updates Caddy from the current version to `${{ needs.check-caddy-updates.outputs.latest_version }}`.
+            
+            ### Changes
+            - Updated `version.txt`
+            - Updated `Dockerfile` with new Caddy version
+            
+            ### Release Notes
+            See [Caddy Release Notes](https://github.com/caddyserver/caddy/releases/tag/v${{ needs.check-caddy-updates.outputs.latest_version }})
+            
+            ---
+            *This PR was automatically created by the Check for Updates workflow.*
+          branch: auto-update-caddy-${{ needs.check-caddy-updates.outputs.latest_version }}
+          delete-branch: true
+          labels: |
+            automated
+            dependencies
