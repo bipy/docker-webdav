@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Get version
         run: echo "VERSION=$(cat "version.txt" | head -1)" >> $GITHUB_ENV
 
@@ -76,20 +76,20 @@ jobs:
           name: Release v${{ env.VERSION }}
           body: |
             ## Docker WebDAV Server v${{ env.VERSION }}
-            
+
             ### Docker Image
             - `docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/webdav:${{ env.VERSION }}`
             - `docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/webdav:latest`
-            
+
             ### Base Components
             - **Caddy Server**: v${{ env.VERSION }}
             - **WebDAV Plugin**: [mholt/caddy-webdav](https://github.com/mholt/caddy-webdav)
             - **Cloudflare DNS Plugin**: [caddy-dns/cloudflare](https://github.com/caddy-dns/cloudflare)
-            
+
             ### Platforms
             - linux/amd64
             - linux/arm64
-            
+
             ### Documentation
             See [README.md](https://github.com/${{ github.repository }}/blob/main/README.md) for usage instructions.
           draft: false

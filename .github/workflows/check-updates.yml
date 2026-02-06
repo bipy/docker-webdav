@@ -35,7 +35,7 @@ jobs:
         run: |
           CURRENT="${{ steps.current_version.outputs.version }}"
           LATEST="${{ steps.fetch_latest.outputs.version }}"
-          
+
           if [ "$CURRENT" != "$LATEST" ]; then
             echo "has_update=true" >> $GITHUB_OUTPUT
             echo "New version available: $LATEST (current: $CURRENT)"
@@ -61,14 +61,14 @@ jobs:
         run: |
           NEW_VERSION="${{ needs.check-caddy-updates.outputs.latest_version }}"
           echo "Updating to version $NEW_VERSION"
-          
+
           # Update version.txt
           echo "$NEW_VERSION" > version.txt
-          
+
           # Update Dockerfile
           sed -i "s/caddy:[0-9.]*-builder-alpine/caddy:$NEW_VERSION-builder-alpine/g" Dockerfile
           sed -i "s/caddy:[0-9.]*-alpine/caddy:$NEW_VERSION-alpine/g" Dockerfile
-          
+
           # Show changes
           git diff
 
@@ -80,16 +80,16 @@ jobs:
           title: "chore: update Caddy to ${{ needs.check-caddy-updates.outputs.latest_version }}"
           body: |
             ## Automated Caddy Update
-            
+
             This PR updates Caddy from the current version to `${{ needs.check-caddy-updates.outputs.latest_version }}`.
-            
+
             ### Changes
             - Updated `version.txt`
             - Updated `Dockerfile` with new Caddy version
-            
+
             ### Release Notes
             See [Caddy Release Notes](https://github.com/caddyserver/caddy/releases/tag/v${{ needs.check-caddy-updates.outputs.latest_version }})
-            
+
             ---
             *This PR was automatically created by the Check for Updates workflow.*
           branch: auto-update-caddy-${{ needs.check-caddy-updates.outputs.latest_version }}
