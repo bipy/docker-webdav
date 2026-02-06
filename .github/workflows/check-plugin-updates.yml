@@ -17,8 +17,12 @@ jobs:
         id: check_webdav
         run: |
           echo "Checking mholt/caddy-webdav plugin..."
-          LATEST_COMMIT=$(curl -s https://api.github.com/repos/mholt/caddy-webdav/commits/master | jq -r '.sha[0:7]')
-          LATEST_DATE=$(curl -s https://api.github.com/repos/mholt/caddy-webdav/commits/master | jq -r '.commit.committer.date')
+          # Get default branch first
+          DEFAULT_BRANCH=$(curl -s https://api.github.com/repos/mholt/caddy-webdav | jq -r '.default_branch')
+          # Fetch commit data once
+          COMMIT_DATA=$(curl -s "https://api.github.com/repos/mholt/caddy-webdav/commits/$DEFAULT_BRANCH")
+          LATEST_COMMIT=$(echo "$COMMIT_DATA" | jq -r '.sha[0:7]')
+          LATEST_DATE=$(echo "$COMMIT_DATA" | jq -r '.commit.committer.date')
           echo "Latest commit: $LATEST_COMMIT"
           echo "Latest commit date: $LATEST_DATE"
           echo "commit=$LATEST_COMMIT" >> $GITHUB_OUTPUT
@@ -30,7 +34,9 @@ jobs:
           echo "Checking caddy-dns/cloudflare plugin..."
           LATEST_TAG=$(curl -s https://api.github.com/repos/caddy-dns/cloudflare/releases/latest | jq -r '.tag_name')
           if [ "$LATEST_TAG" = "null" ] || [ -z "$LATEST_TAG" ]; then
-            LATEST_COMMIT=$(curl -s https://api.github.com/repos/caddy-dns/cloudflare/commits/master | jq -r '.sha[0:7]')
+            # Get default branch first
+            DEFAULT_BRANCH=$(curl -s https://api.github.com/repos/caddy-dns/cloudflare | jq -r '.default_branch')
+            LATEST_COMMIT=$(curl -s "https://api.github.com/repos/caddy-dns/cloudflare/commits/$DEFAULT_BRANCH" | jq -r '.sha[0:7]')
             echo "No releases found, using latest commit: $LATEST_COMMIT"
             echo "tag=commit-$LATEST_COMMIT" >> $GITHUB_OUTPUT
           else
