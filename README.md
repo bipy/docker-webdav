@@ -16,7 +16,7 @@ See [bipy/webdav - DockerHub](https://hub.docker.com/r/bipy/webdav)
 
 **Base Server:** [Caddy](https://github.com/caddyserver/caddy)
 
-**WebDAV Plugin:** [caddy-webdav](https://github.com/mholt/caddy-webdav)
+**WebDAV Plugin:** [caddy-webdav](https://github.com/bipy/caddy-webdav)
 
 **DNS Plugin:** [caddy-dns/cloudflare](https://github.com/caddy-dns/cloudflare)
 

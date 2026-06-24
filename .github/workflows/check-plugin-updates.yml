@@ -19,11 +19,11 @@ jobs:
       - name: Check caddy-webdav plugin
         id: check_webdav
         run: |
-          echo "Checking mholt/caddy-webdav plugin..."
+          echo "Checking bipy/caddy-webdav plugin..."
           # Get default branch first
-          DEFAULT_BRANCH=$(curl -s https://api.github.com/repos/mholt/caddy-webdav | jq -r '.default_branch')
+          DEFAULT_BRANCH=$(curl -s https://api.github.com/repos/bipy/caddy-webdav | jq -r '.default_branch')
           # Fetch commit data once
-          COMMIT_DATA=$(curl -s "https://api.github.com/repos/mholt/caddy-webdav/commits/$DEFAULT_BRANCH")
+          COMMIT_DATA=$(curl -s "https://api.github.com/repos/bipy/caddy-webdav/commits/$DEFAULT_BRANCH")
           LATEST_COMMIT=$(echo "$COMMIT_DATA" | jq -r '.sha[0:7]')
           LATEST_DATE=$(echo "$COMMIT_DATA" | jq -r '.commit.committer.date')
           echo "Latest commit: $LATEST_COMMIT"
@@ -60,10 +60,10 @@ jobs:
 
             This is an automated check of the Caddy plugins used in this Docker image.
 
-            ### caddy-webdav (mholt/caddy-webdav)
+            ### caddy-webdav (bipy/caddy-webdav)
             - Latest commit: \`${webdavCommit}\`
             - Commit date: ${webdavDate}
-            - Repository: https://github.com/mholt/caddy-webdav
+            - Repository: https://github.com/bipy/caddy-webdav
 
             ### caddy-dns/cloudflare
             - Latest version: \`${cloudflareTag}\`

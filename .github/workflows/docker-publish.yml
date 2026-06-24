@@ -83,7 +83,7 @@ jobs:
 
             ### Base Components
             - **Caddy Server**: v${{ env.VERSION }}
-            - **WebDAV Plugin**: [mholt/caddy-webdav](https://github.com/mholt/caddy-webdav)
+            - **WebDAV Plugin**: [bipy/caddy-webdav](https://github.com/bipy/caddy-webdav)
             - **Cloudflare DNS Plugin**: [caddy-dns/cloudflare](https://github.com/caddy-dns/cloudflare)
 
             ### Platforms

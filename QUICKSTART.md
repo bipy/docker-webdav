@@ -191,7 +191,7 @@ Common cron patterns:
    ```dockerfile
    RUN xcaddy build \
        --with github.com/caddy-dns/cloudflare \
-       --with github.com/mholt/caddy-webdav \
+       --with github.com/bipy/caddy-webdav \
        --with github.com/your-org/your-plugin
    ```
 
