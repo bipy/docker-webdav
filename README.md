@@ -11,12 +11,14 @@ See [bipy/webdav - DockerHub](https://hub.docker.com/r/bipy/webdav)
 - 🏗️ **Multi-platform**: Supports both amd64 and arm64 architectures
 - 📦 **Latest Plugins**: Always builds with the latest Caddy plugins
 - 🔐 **Cloudflare DNS**: Includes Cloudflare DNS plugin for automatic HTTPS
+- 📊 **WebDAV Quota Reporting**: Reports filesystem capacity through RFC 4331
+  `quota-available-bytes` and `quota-used-bytes` properties
 
 ## Dependency
 
 **Base Server:** [Caddy](https://github.com/caddyserver/caddy)
 
-**WebDAV Plugin:** [caddy-webdav](https://github.com/bipy/caddy-webdav)
+**WebDAV Plugin:** [caddy-webdav](https://github.com/bipy/caddy-webdav), including RFC 4331 filesystem quota reporting
 
 **DNS Plugin:** [caddy-dns/cloudflare](https://github.com/caddy-dns/cloudflare)
 
