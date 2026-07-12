@@ -1,10 +1,10 @@
 # build
-FROM caddy:2.11.4-builder-alpine AS builder
+FROM caddy:null-builder-alpine AS builder
 RUN xcaddy build \
     --with github.com/caddy-dns/cloudflare \
     --with github.com/bipy/caddy-webdav
 
 # image
-FROM caddy:2.11.4-alpine
+FROM caddy:null-alpine
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 
